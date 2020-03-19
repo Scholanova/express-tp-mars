@@ -7,7 +7,7 @@ const sinon = require('sinon')
 const models  = require('../lib/models');
 chai.use(chaiHttp)
 chai.use(require('sinon-chai'));
-
+chai.use(require('chai-as-promised'));
 const expect = chai.expect
 const request = chai.request
 before(async () => {

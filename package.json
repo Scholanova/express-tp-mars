@@ -5,11 +5,11 @@
   "scripts": {
     "start": "node ./bin/www",
     "start:dev": "nodemon ./bin/www",
-    "test": "mocha --recursive",
-    "db:init": "npx sequelize db:create",
-    "db:migrate": "npx sequelize db:migrate",
-    "db:seed": "npx sequelize db:seed",
-    "db:test:init": "NODE_ENV=test npx sequelize db:create"
+    "test": "node ./node_modules/mocha/bin/_mocha --recursive",
+    "db:init": "node ./node_modules/sequelize-cli/lib/sequelize db:create",
+    "db:migrate": "node ./node_modules/sequelize-cli/lib/sequelize db:migrate",
+    "db:seed": "node ./node_modules/sequelize-cli/lib/sequelize db:seed",
+    "db:test:init": "set NODE_ENV=test&& node ./node_modules/sequelize-cli/lib/sequelize db:create"
   },
   "dependencies": {
     "cookie-parser": "^1.4.5",
@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
     "chai-http": "^4.3.0",
     "mocha": "^7.1.1",
     "nodemon": "^2.0.2",
