@@ -54,7 +54,7 @@ describe('calculusService', () => {
         operand2 = 1
   
         // when
-        sumPromise = calculusService.min(operand1, operand2)
+        sumPromise = calculusService.soustract(operand1, operand2)
       })
   
       it('should return the substract', () => {
@@ -72,7 +72,7 @@ describe('calculusService', () => {
         operand2 = 2
 
         // when
-        sumPromise = calculusService.min(operand1, operand2)
+        sumPromise = calculusService.soustract(operand1, operand2)
       })
 
       it('should throw an not positive error', () => {
