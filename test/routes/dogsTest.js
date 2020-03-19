@@ -88,13 +88,18 @@ describe('dogRoutes', () => {
     })
 
     context('when the id dogs not in the repository', () => {
-      dogId = 1
+      dogId = '1'
       beforeEach(async () => {
         // given
         dogRepository.get.rejects(new DogNotFoundError())
 
         // when
         response = await request(app).get(`/dogs/${dogId}`)
+      })
+
+      it('should call the repository with id', () => {
+        // then
+        expect(dogRepository.get).to.have.been.calledWith(dogId)
       })
 
       it('should failed with a status 404', () => {
@@ -109,7 +114,7 @@ describe('dogRoutes', () => {
       })
     })
     context('when the id dogs is in the repository', () => {
-      dogId = 2
+      dogId = '2'
       beforeEach(async () => {
         // given
         const dog = new Dog({ name: 'Rex', age: 12 })
@@ -117,6 +122,11 @@ describe('dogRoutes', () => {
 
         // when
         response = await request(app).get(`/dogs/${dogId}`)
+      })
+
+      it('should call the repository with id', () => {
+        // then
+        expect(dogRepository.get).to.have.been.calledWith(dogId)
       })
 
       it('should success with a status 200', () => {
