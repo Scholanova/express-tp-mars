@@ -21,10 +21,12 @@ Commitez à chaque étape que vous réussissez.
 - Lancer le server avec `npm start` et verifier qu'il se lance sur le port 3000
 - Lancer le server de dev avec `npm run start:dev` et verifier qu'il se lance le port 3000
 
-## PARTIE 1 - CREER UN CHIEN
+## PARTIE 1 - CREER UN CHIEN"
 Partant du projet précédent, la table DOG, la migration, ainsi que le model sont d'ors et déjà créé.
 
-- Créer une page pour afficher un chien, sur `/dogs/:id` 
+- Créer une page pour afficher un chien, sur `/dogs/:id`
+- faire que le Dog repository, renvoie une erreur NotFoundError dans le cas ou le chien n'est pas trouvé en base.
+- faire que quand le chien n'est pas trouvé, une page 404 s'affiche
 - Tester que la page `/dogs/:id` affiche bien le nom et l'age du chien  
 - Créer un service pour créer un chien
         - vérifiant qu’il a bien un nom et un age > 0

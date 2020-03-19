@@ -1,84 +1,95 @@
 const { expect } = require('../testHelper')
 
 const calculusService = require('../../lib/services/calculusService')
-const { NotEvenResultError,NotPositiveResultError } = require('../../lib/errors')
+const { NotEvenResultError, NegativeResultError } = require('../../lib/errors');
 
 describe('calculusService', () => {
-  
+
   describe('sum', () => {
 
     let operand1
     let operand2
     let sumPromise
 
-    context('when the two operands sum to a even number', () => {
+    beforeEach(() => {
+      // given
+      operand1 = 1
+      operand2 = 3
 
-      beforeEach(() => {
-        // given
-        operand1 = 1
-        operand2 = 3
-
-        // when
-        sumPromise = calculusService.sum(operand1, operand2)
-      })
-
-      it('should return the sum', () => {
-        // then
-        const expectedSum = operand1 + operand2
-        return expect(sumPromise).to.eventually.equal(expectedSum)
-      })
+      // when
+      result = calculusService.sum(operand1, operand2)
     })
 
-    context('when the two operands sum to an odd number', () => {
-
-      beforeEach(() => {
-        // given
-        operand1 = 1
-        operand2 = 2
-
-        // when
-        sumPromise = calculusService.sum(operand1, operand2)
-      })
-
-      it('should throw an not even error', () => {
-        // then
-        return expect(sumPromise).to.eventually.be.rejectedWith(NotEvenResultError)
-      })
-    })
-
-    context('when the two operands substract to a positive number', () => {
-
-      beforeEach(() => {
-        // given
-        operand1 = 3
-        operand2 = 1
-  
-        // when
-        sumPromise = calculusService.soustract(operand1, operand2)
-      })
-  
-      it('should return the substract', () => {
-        // then
-        const expectedSum = operand1 - operand2
-        return expect(sumPromise).to.eventually.equal(expectedSum)
-      })
-    })
-
-    context('when the two operands sum to a negative number', () => {
-
-      beforeEach(() => {
-        // given
-        operand1 = 1
-        operand2 = 2
-
-        // when
-        sumPromise = calculusService.soustract(operand1, operand2)
-      })
-
-      it('should throw an not positive error', () => {
-        // then
-        return expect(sumPromise).to.eventually.be.rejectedWith(NotPositiveResultError)
-      })
+    it('should return the sum', () => {
+      // then
+      const expectedSum = operand1 + operand2
+      return expect(result).to.eventually.equal(expectedSum)
     })
   })
-})
+
+  context('when the two operands sum to a odd number', () => {
+    
+    beforeEach(() => {
+      // given
+      operand1 = 1
+      operand2 = 2
+      result = operand1 + operand2
+    })
+
+    it('should throw NotEventResultError', () => {
+      // when & then
+      return expect(calculusService.sum(operand1, operand2)).to.eventually.be.rejectedWith(NotEvenResultError)
+    })
+
+  })
+
+  context('when the two operands substract to a even number', () => {
+
+    beforeEach(() => {
+      // given
+      operand1 = 3
+      operand2 = 1
+      
+      // when
+      result = calculusService.substract(operand1, operand2)
+    })
+
+    it('should return the sum', () => {
+      // then
+      const expectedSum = operand1 - operand2
+      return expect(result).to.eventually.equal(expectedSum)
+    })
+
+  })
+
+  context('when two operands substract to a positive number', () => {
+
+    beforeEach(() => {
+      // given
+      operand1 = 4
+      operand2 = 1
+      result = operand1 - operand2
+    })
+
+    it('should throw NotEventResultError', () => {
+      // when & then
+      return expect(calculusService.substract(operand1, operand2)).to.eventually.equal(result)
+    })
+
+  })
+
+  context('when two operands substract to a negative number', () => {
+
+    beforeEach(() => {
+      // given
+      operand1 = 1
+      operand2 = 4
+      result = operand1 - operand2
+    })
+
+    it('should throw NotEventResultError', () => {
+      // when & then
+      return expect(calculusService.substract(operand1, operand2)).to.eventually.be.rejectedWith(NegativeResultError)
+    })
+
+  })
