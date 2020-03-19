@@ -71,7 +71,7 @@ describe('calculusService', () => {
       })
     })
 
-    context('when the two operands sum to an odd number', () => {
+    context('when the two operands sub to an odd number', () => {
 
       beforeEach(() => {
         // given
@@ -85,6 +85,23 @@ describe('calculusService', () => {
       it('should throw an not even error', () => {
         // then
         return expect(subPromise).to.eventually.be.rejectedWith(NotEvenResultError)
+      })
+    })
+
+    context('when the two operands the second must be plus petit que le deuxieme ', () => {
+
+      beforeEach(() => {
+        // given
+        operand1 = 4
+        operand2 = 5
+
+        // when
+        subPromise = calculusService.sub(operand1, operand2)
+      })
+
+      it('should throw an not even error', () => {
+        // then
+        return expect(subPromise).to.eventually.be.rejectedWith()
       })
     })
   })
