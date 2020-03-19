@@ -1,4 +1,4 @@
-const { expect, sinon } = require('../testHelper')
+const { expect } = require('../testHelper')
 const { NotEvenResultError,  MustBePositiveError} = require('../../lib/errors')
 
 const calculusService = require('../../lib/services/calculusService')
@@ -23,7 +23,7 @@ describe('calculusService', () => {
     it('should return the sum', () => {
       // then
       const expectedSum = operand1 + operand2
-      return expect(result).to.be.equal(expectedSum)
+      expect(result).to.be.equal(expectedSum)
     })
   })
 
@@ -36,9 +36,12 @@ describe('calculusService', () => {
 
     })
 
+    // when
+    sumPromise = calculusService.sum(operand1, operand2)
+
     it('should return the sum', () => {
-      // when
-      expect(calculusService.sum(operand1, operand2)).to.eventually.throw(new NotEvenResultError(result))
+      // then
+      return expect(sumPromise).to.eventually.be.rejectedWith(NotEvenResultError)
     })
   })
 
@@ -56,7 +59,7 @@ describe('calculusService', () => {
     it('should return the substract', () => {
       // then
       const expectedSubstract = operand1 - operand2
-      return expect(result).to.be.equal(expectedSubstract)
+      expect(result).to.be.equal(expectedSubstract)
     })
   })
 
@@ -68,12 +71,12 @@ describe('calculusService', () => {
       operand2 = 2
 
       // when
-      promise = calculusService.substract(operand1, operand2)
+      substractPromise = calculusService.substract(operand1, operand2)
     })
 
     it('should return the substract', () => {
       // then
-      expect(promise).to.eventually.throw(new MustBePositiveError(result))
+      return expect(substractPromise).to.eventually.be.rejectedWith(MustBePositiveError)
     })
   })
 })
