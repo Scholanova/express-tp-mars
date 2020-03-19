@@ -75,4 +75,41 @@ describe('dogRepository', () => {
       })
     })
   })
+
+  describe('get', () => {
+    let result
+
+    context('when there is no dog with this id in the repository', () => {
+
+      beforeEach(async () => {
+        // given
+
+        // when
+        result = await dogRepository.get(1)
+      })
+
+      it('should return null', () => {
+        // then
+        expect(result).to.be.null
+      })
+    })
+
+    context('when there is a dog in the repository', () => {
+
+      let dog
+
+      beforeEach(async () => {
+        // given
+        dog = await dogRepository.create({ id:1, name: 'Rex', age: 12 })
+
+        // when
+        result = await dogRepository.get(1)
+      })
+
+      it('should return a dog', () => {
+        // then
+        expect(result.get('name')).to.be.equal('Rex')
+      })
+    })
+  })
 })

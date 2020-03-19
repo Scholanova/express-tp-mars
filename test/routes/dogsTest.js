@@ -79,4 +79,49 @@ describe('dogRoutes', () => {
     //   })
     // })
   })
+
+  describe('getOne', () => {
+
+    let response
+
+    beforeEach(() => {
+      sinon.stub(dogRepository, 'get')
+    })
+
+    context('when there is no dog with that Id', () => {
+
+      beforeEach(async () => {
+        // when
+        dogRepository.get.resolves(null)
+        response = await request(app).get('/dogs/1')
+      })
+
+      it('should return status 404', () => {
+        // then
+        expect(response).to.have.status(404)
+      })
+    })
+
+    context('when there is a dog with that Id', () => {
+      beforeEach(async () => {
+        // given
+        const dog = new Dog({ name: 'Rex', age: 12 })
+        dogRepository.get.resolves(dog)
+
+        // when
+        response = await request(app).get('/dogs/1')
+      })
+
+      it('should succeed with a status 200', () => {
+        // then
+        expect(response).to.have.status(200)
+      })
+
+      it('should return a dog', () => {
+        // then
+        expect(response).to.be.html
+        expect(response.text).to.contain('Rex - 12')
+      })
+    })
+  })
 })
