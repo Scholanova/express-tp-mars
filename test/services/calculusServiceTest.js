@@ -1,15 +1,15 @@
-const { expect, sinon } = require('../testHelper')
+const { expect } = require('../testHelper')
 
 const calculusService = require('../../lib/services/calculusService')
 const { NotEvenResultError, NegativeResultError } = require('../../lib/errors');
 
 describe('calculusService', () => {
 
-  let operand1
-  let operand2
-  let result
+  describe('sum', () => {
 
-  context('when the two operands sum to a even number', () => {
+    let operand1
+    let operand2
+    let sumPromise
 
     beforeEach(() => {
       // given
