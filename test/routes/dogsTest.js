@@ -118,10 +118,10 @@ describe('dogRoutes', () => {
       })
     })
 
-
-    context('when there is no dog matching in the repository', () => {
+    context('when there is a dog matching in the repository', () => {
 
       let dog
+
       beforeEach(async () => {
         // given
         dogId = '123'
