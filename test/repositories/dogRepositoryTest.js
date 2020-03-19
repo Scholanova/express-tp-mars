@@ -24,7 +24,7 @@ describe('dogRepository', () => {
       createdDog =  await dogRepository.create(dogData)
       retrievedDog = await dogRepository.get(createdDog.id)
     })
-
+ 
     it('should return a dog with the right properties', () => {
       // then
       const createdDogValue = createdDog.get()
