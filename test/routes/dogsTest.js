@@ -79,4 +79,61 @@ describe('dogRoutes', () => {
     //   })
     // })
   })
+
+  describe('dog', () => {
+
+    let response
+
+    beforeEach(() => {
+      sinon.stub(dogRepository, 'get');
+    })
+
+    context('when there is a dog in the repository', () => {
+
+      beforeEach(async () => {
+        // given
+        const dog = new Dog({ name: 'Rooky', age: 2 })
+        dogRepository.get.resolves(dog)
+
+        // when
+        response = await request(app).get(`/dogs/${dog.id}`)
+      })
+
+      it('should succeed with a status 200', () => {
+        // then
+        expect(response).to.have.status(200)
+      })
+
+      it('should return an html with dog info inside', () => {
+        // then
+        expect(response).to.be.html
+        expect(response.text).to.contain('Rooky - 2')
+      })
+
+    })
+
+    context('when there is a no dog in the repository', () => {
+
+      beforeEach(async () => {
+        // given
+        dogRepository.get.resolves(null)
+
+        // when
+        response = await request(app).get(`/dogs/1`)
+      })
+
+      it('should error with a status 404', () => {
+        // then
+        expect(response).to.have.status(404)
+      })
+
+      it('should return an html with dog info inside', () => {
+        // then
+        expect(response).to.be.html
+        expect(response.text).to.contain('Dog 1 not found')
+      })
+
+    })
+
+  })
 })
