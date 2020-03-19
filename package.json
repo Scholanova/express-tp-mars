@@ -12,6 +12,7 @@
     "db:test:init": "set NODE_ENV=test&& npx sequelize db:create"
   },
   "dependencies": {
+    "chai-as-promised": "^7.1.1",
     "cookie-parser": "^1.4.5",
     "debug": "~2.6.9",
     "ejs": "~2.6.1",
