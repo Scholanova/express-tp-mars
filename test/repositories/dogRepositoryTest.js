@@ -1,13 +1,35 @@
-const { expect, sinon } = require('../testHelper')
+const { expect } = require('../testHelper')
 
 const dogRepository = require('../../lib/repositories/dogRepository')
 const models = require('../../lib/models')
+const { RessourceNotFoundError } = require('../../lib/errors')
 const Dog = models.Dog
 
 describe('dogRepository', () => {
 
   afterEach(async () => {
     await Dog.destroy({ where: {} })
+  })
+
+  describe('get', () => {
+
+    let notExistingId
+    let getDogPromise
+
+    context('dog does not exist', () => {
+      beforeEach(async () => {
+        // given
+        notExistingId = 23456789
+
+        // when
+        getDogPromise = dogRepository.get(notExistingId)
+      })
+
+      it('should throw a not found error', () => {
+        // then
+        return expect(getDogPromise).to.eventually.be.rejectedWith(RessourceNotFoundError)
+      })
+    })
   })
 
   describe('create', () => {
