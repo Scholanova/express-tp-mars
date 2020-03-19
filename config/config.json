@@ -3,7 +3,7 @@
     "username": "postgres",
     "password": "postgres",
     "database": "scholanova_express_development",
-    "host": "127.0.0.1",
+    "host": "192.168.1.40",
     "dialect": "postgres",
     "logging": true
   },
@@ -19,7 +19,7 @@
     "username": "postgres",
     "password": "postgres",
     "database": "scholanova_express_production",
-    "host": "127.0.0.1",
+    "host": "192.168.1.40",
     "dialect": "postgres",
     "logging": true
   }
