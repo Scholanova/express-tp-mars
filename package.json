@@ -9,7 +9,7 @@
     "db:init": "npx sequelize db:create",
     "db:migrate": "npx sequelize db:migrate",
     "db:seed": "npx sequelize db:seed",
-    "db:test:init": "NODE_ENV=test npx sequelize db:create"
+    "db:test:init": "set NODE_ENV=test&& npx sequelize db:create"
   },
   "dependencies": {
     "cookie-parser": "^1.4.5",
@@ -30,5 +30,21 @@
     "sequelize-cli": "^5.5.1",
     "sinon": "^9.0.1",
     "sinon-chai": "^3.5.0"
-  }
+  },
+  "description": "Le projet correspondant aux cours du 19 et 20 mars 2020. \r Il fait suite au projet express du 20 et 21 fevrier.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Scholanova/express-tp-mars.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Scholanova/express-tp-mars/issues"
+  },
+  "homepage": "https://github.com/Scholanova/express-tp-mars#readme"
 }
