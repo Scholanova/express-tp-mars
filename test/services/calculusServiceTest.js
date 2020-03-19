@@ -1,10 +1,10 @@
 const { expect } = require('../testHelper')
 
 const calculusService = require('../../lib/services/calculusService')
-const { NotEvenResultError } = require('../../lib/errors')
+const { NegativeResultError, NotEvenResultError } = require('../../lib/errors')
 
 describe('calculusService', () => {
-  
+
   describe('sum', () => {
 
     let operand1
@@ -40,7 +40,7 @@ describe('calculusService', () => {
         sumPromise = calculusService.sum(operand1, operand2)
       })
 
-      it('should throw an not even error', () => {
+      it('should throw a not even error', () => {
         // then
         return expect(sumPromise).to.eventually.be.rejectedWith(NotEvenResultError)
       })
@@ -86,4 +86,6 @@ describe('calculusService', () => {
 
 
   })
+
+ 
 })
