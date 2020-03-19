@@ -83,6 +83,7 @@ describe('dogRoutes', () => {
   describe('dog', () => {
 
     let response
+    let dogId
 
     beforeEach(() => {
       sinon.stub(dogRepository, 'get');
@@ -90,13 +91,21 @@ describe('dogRoutes', () => {
 
     context('when there is a dog in the repository', () => {
 
+      let dog
+
       beforeEach(async () => {
         // given
-        const dog = new Dog({ name: 'Rooky', age: 2 })
+        dogId = '19'
+        dog = new Dog({id: dogId, name: 'Rooky', age: 2 })
         dogRepository.get.resolves(dog)
 
         // when
         response = await request(app).get(`/dogs/${dog.id}`)
+      })
+
+      it('should call the repository with id', () => {
+        // then
+        expect(dogRepository.get).to.have.been.calledWith(dogId)
       })
 
       it('should succeed with a status 200', () => {
@@ -117,12 +126,18 @@ describe('dogRoutes', () => {
       beforeEach(async () => {
         // given
         dogRepository.get.resolves(null)
+        dogId = '1'
 
         // when
-        response = await request(app).get(`/dogs/1`)
+        response = await request(app).get(`/dogs/${dogId}`)
       })
 
-      it('should error with a status 404', () => {
+      it('should call the repository with id', () => {
+        // then
+        expect(dogRepository.get).to.have.been.calledWith(dogId)
+      })
+
+      it('should return error with a status 404', () => {
         // then
         expect(response).to.have.status(404)
       })
