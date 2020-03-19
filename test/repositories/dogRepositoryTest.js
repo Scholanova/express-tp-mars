@@ -1,8 +1,41 @@
 const { expect, sinon } = require('../testHelper')
 
 const dogRepository = require('../../lib/repositories/dogRepository')
+const models = require('../../lib/models')
+const Dog = models.Dog
 
 describe('dogRepository', () => {
+
+  afterEach(async () => {
+    await Dog.destroy({ where: {} })
+  })
+
+  describe('create', () => {
+
+    let createdDog
+    let retrievedDog
+    let dogData
+
+    beforeEach(async () => {
+      // given
+      dogData = { name: 'Rex', age: 12 }
+
+      // when
+      createdDog =  await dogRepository.create(dogData)
+      retrievedDog = await dogRepository.get(createdDog.id)
+    })
+
+    it('should return a dog with the right properties', () => {
+      // then
+      const createdDogValue = createdDog.get()
+      const retrievedDogValue = retrievedDog.get()
+
+      expect(createdDogValue.name).to.equal(dogData.name)
+      expect(createdDogValue.age).to.equal(dogData.age)
+
+      expect(createdDogValue).to.deep.equal(retrievedDogValue)
+    })
+  })
 
   describe('listAll', () => {
     let result
