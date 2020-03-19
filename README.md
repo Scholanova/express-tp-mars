@@ -1,10 +1,10 @@
-# PROJET EXPRESS NODE.JS
+﻿# PROJET EXPRESS NODE.JS
 
 Le projet correspondant aux cours du 19 et 20 mars 2020. 
 Il fait suite au projet express du 20 et 21 fevrier.
 
 NPM doit être installé sur votre machine, ainsi que Postgres.
-Il vous faut cloner le repository, creer une branche à votre nom sous le format `eleves/nom-prenom`.
+Il vous faut cloner le repository, creer une branche à votre nom sous le format `eleves/nom-prenom`DIARRA-Dienaba.
 Commitez à chaque étape que vous réussissez.
 
 ## PREREQUIS 
