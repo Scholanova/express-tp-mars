@@ -153,15 +153,14 @@ describe('dogRoutes', () => {
     })
   })
 
-  describe('new',()=>{
-    context('When a good dog is filled', () =>{
+  describe('new test for dogs',()=>{
+    context('When a good dog is completely filled', () =>{
       beforeEach(()=>{
         dogId = '123'
         dogAge = 4
         dogName = 'Rex'
         dogData = {Age:dogAge,Name:dogName}
       })
-      //when
         
         request(app).post('/dogs/new')
         .send({Age:dogAge,Name:dogName})
