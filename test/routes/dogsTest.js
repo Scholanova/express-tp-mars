@@ -119,7 +119,7 @@ describe('dogRoutes', () => {
     })
 
 
-    context('when there is no dog matching in the repository', () => {
+      context('when there is no dog matching in the repository', () => {
 
       let dog
       beforeEach(async () => {
@@ -151,4 +151,5 @@ describe('dogRoutes', () => {
       })
     })
   })
+
 })
