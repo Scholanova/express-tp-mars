@@ -1,0 +1,30 @@
+const { ResourceNotFoundError } = require('../errors')
+
+const models = require('../models')
+const Dog = models.Dog
+
+const dogRepository = {
+<<<<<<< HEAD
+  get: (id) => {return Dog.findOne({where: {id}})},
+  create: (dog) => {
+=======
+  get: (id) => {
+    return Dog.findOne({where: {id}})
+      .then((dogResult) => {
+        if(dogResult === null) {
+          throw new ResourceNotFoundError()
+        }
+        return dogResult
+      })
+  },
+  create: (dogData) => {
+    const dog = new Dog(dogData)
+>>>>>>> origin/master
+    return dog.save()
+  },
+  listAll: () => {
+    return Dog.findAll()
+  }
+}
+
+module.exports = dogRepository
