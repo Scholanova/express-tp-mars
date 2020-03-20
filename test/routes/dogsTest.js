@@ -1,5 +1,5 @@
 const { expect, request, sinon } = require('../testHelper')
-const { RessourceNotFoundError } = require('../../lib/errors')
+const { ResourceNotFoundError } = require('../../lib/errors')
 const app = require('../../lib/app')
 const dogRepository = require('../../lib/repositories/dogRepository')
 const models = require('../../lib/models')
@@ -95,7 +95,7 @@ describe('dogRoutes', () => {
       beforeEach(async () => {
         // given
         dogId = '123'
-        dogRepository.get.rejects(new RessourceNotFoundError())
+        dogRepository.get.rejects(new ResourceNotFoundError())
 
         // when
         response = await request(app).get(`/dogs/${dogId}`)
