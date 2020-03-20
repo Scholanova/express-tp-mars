@@ -1,5 +1,6 @@
 const { expect, request, sinon } = require('../testHelper')
 const { RessourceNotFoundError } = require('../../lib/errors')
+const dogService = require('../../lib/services/dogService')
 const app = require('../../lib/app')
 const dogRepository = require('../../lib/repositories/dogRepository')
 const models = require('../../lib/models')
@@ -155,19 +156,21 @@ describe('dogRoutes', () => {
 
   describe('new',()=>{
     context('When a good dog is filled', () =>{
-      beforeEach(()=>{
+      beforeEach( async()=>{
+        sinon.stub(dogService, 'create')
         dogId = '123'
         dogAge = 4
         dogName = 'Rex'
         dogData = {Age:dogAge,Name:dogName}
-      })
+      
       //when
-        
-        request(app).post('/dogs/new')
-        .send({Age:dogAge,Name:dogName})
+        response = await request(app).post('/dogs/new')
+        .type('form')
+        .send({'_method':'post','Age':4,'Name':'Rex'})
+      })
       it('should call the dogService with right data',()=>{
-        expect(dogService.create).have.been.calledWith(dogData)
-        })
+          expect(dogService.create).have.been.calledWith(dogData)
       })
     })
   })
+})
