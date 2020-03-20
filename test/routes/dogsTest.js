@@ -5,6 +5,7 @@ const dogRepository = require('../../lib/repositories/dogRepository')
 const models = require('../../lib/models')
 const Dog = models.Dog
 
+
 describe('dogRoutes', () => {
 
   describe('list', () => {
@@ -151,4 +152,22 @@ describe('dogRoutes', () => {
       })
     })
   })
-})
+
+  describe('new',()=>{
+    context('When a good dog is filled', () =>{
+      beforeEach(()=>{
+        dogId = '123'
+        dogAge = 4
+        dogName = 'Rex'
+        dogData = {Age:dogAge,Name:dogName}
+      })
+      //when
+        
+        request(app).post('/dogs/new')
+        .send({Age:dogAge,Name:dogName})
+      it('should call the dogService with right data',()=>{
+        expect(dogService.create).have.been.calledWith(dogData)
+        })
+      })
+    })
+  })
