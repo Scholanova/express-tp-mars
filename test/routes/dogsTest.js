@@ -122,12 +122,12 @@ describe('dogRoutes', () => {
         response = await request(app).get(`/dogs/0`)
       })
 
-      it('should succeed with a status 200', () => {
+      it('should succeed with a status 404', () => {
         // then
         expect(response).to.have.status(404)
       })
 
-      it('should return an html with dog info inside', () => {
+      it('should return an html with error info', () => {
         // then
         expect(response).to.be.html
         expect(response.text).to.contain('This page does not exist')

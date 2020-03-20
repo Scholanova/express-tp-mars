@@ -10,6 +10,10 @@ describe('dogService', () => {
   let retrieveDog
   let dogData
 
+  beforeEach(() => {
+	sinon.stub(dogRepository, 'create');
+  })
+
   context('when the data are correct', () => {
 
 	beforeEach(async () => {
@@ -17,8 +21,8 @@ describe('dogService', () => {
 	  dogData = { name: 'Rex', age: 12 }
 
 	  // when
-	  createdDog = await dogRepository.create(dogData);
-	  retrieveDog = await dogRepository.get(dogData.id);
+	  createdDog = await dogService.create(dogData);
+	  retrieveDog = await dogRepository.get(createdDog.id);
 	})
 
 	it('should return the created dog', () => {
