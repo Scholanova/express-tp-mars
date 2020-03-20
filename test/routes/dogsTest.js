@@ -1,6 +1,7 @@
 const { expect, request, sinon } = require('../testHelper')
-const { ResourceNotFoundError } = require('../../lib/errors')
+const { ResourceNotFoundError, ValidationError } = require('../../lib/errors')
 const app = require('../../lib/app')
+const dogService = require('../../lib/services/dogService')
 const dogRepository = require('../../lib/repositories/dogRepository')
 const models = require('../../lib/models')
 const Dog = models.Dog
@@ -116,6 +117,7 @@ describe('dogRoutes', () => {
         expect(response).to.be.html
         expect(response.text).to.contain('Resource not found')
       })
+
     })
 
     context('when there is a dog matching in the repository', () => {
@@ -151,4 +153,82 @@ describe('dogRoutes', () => {
       })
     })
   })
+
+  describe('create', () => {
+
+    let dogData
+
+    beforeEach(() => {
+      sinon.stub(dogService, 'create')
+    })
+
+    context('when there is a name, an age', () => {
+
+      beforeEach(async () => {
+        // given
+        dogData = {
+          name: 'Rex',
+          age: 12
+        }
+        dogService.create.resolves(new Dog({id: 5, ...dogData}));
+
+        // when
+        response = await request(app).post(`/dogs/new`).send(dogData).redirects(0)
+      })
+
+      it('should call the service with data', () => {
+        // then
+        expect(dogService.create).to.have.been.calledWith(dogData)
+      })
+
+      it('should succeed with a status 302', () => {
+        // then
+        expect(response).to.have.status(302)
+      })
+
+      it('should redirect to the list page', () => {
+        // then
+        expect(response).to.redirectTo(`/dogs/5`)
+      })
+
+    })
+
+    context('when there is no name and no age', () => {
+
+      beforeEach(async () => {
+        // given
+        dogData = {
+          name: null,
+          age: null
+        }
+        let validationError = new ValidationError();
+        validationError.addFailedField('name', 'cannot be empty')
+        validationError.addFailedField('age', 'cannot be empty')
+        dogService.create.throw(validationError);
+
+        // when
+        response = await request(app).post(`/dogs/new`).send(dogData)
+      })
+
+      it('should call the service with data', () => {
+        // then
+        expect(dogService.create).to.have.been.calledWith(dogData)
+      })
+
+      it('should succeed with a status 302', () => {
+        // then
+        expect(response).to.have.status(400)
+      })
+
+      it('should redirect to formulaire with errors', () => {
+        // then
+        expect(response).to.be.html
+        console.log(response.text)
+        expect(response.text).to.contain('cannot be empty')
+      })
+      
+    })
+
+  })
+
 })
