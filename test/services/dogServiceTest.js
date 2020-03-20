@@ -3,7 +3,7 @@ const dogService = require('../../lib/services/dogService')
 const dogRepository = require('../../lib/repositories/dogRepository')
 const models = require('../../lib/models')
 const Dog = models.Dog
-const { RequiredFielsError, NoEmptyField, NegativeAgeError } = require('../../lib/errors');
+const { RequiredFieldsError, NoEmptyField, NegativeAgeError } = require('../../lib/errors');
 
 describe('dogService', () => {
 
@@ -46,19 +46,20 @@ describe('dogService', () => {
 
       beforeEach(() => {
         // given
-        dogData = { name: '', age: 12 }
+        dogData = { name:"", age: 12 }
         // when
         //createdDog =  await dogService.create(dogData)
         getDogPromise = dogService.create(dogData)
       })
 
-      it('should not call the dog Repository', async() => {
+      it('should not call the dog Repository', async () => {
         // then
-        await getDogPromise
-        expect(dogRepository.create(dogData)).to.not.been.called
+        await getDogPromise.catch(()=>{})  //i.e try{await getDogPromise}catch{}
+        expect(dogRepository.create).to.not.have.been.called
       })
-      it('should reject with a missing parameter error', () => {
+      it('should reject with a missing parameter error', async() => {
         // then
+        await getDogPromise.catch(()=>{})
         return expect(getDogPromise).to.eventually.be.rejectedWith(NoEmptyField)
       })
     })
