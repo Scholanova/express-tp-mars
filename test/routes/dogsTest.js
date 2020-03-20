@@ -95,7 +95,7 @@ describe('dogRoutes', () => {
       beforeEach(async () => {
         // given
         dogId = '123'
-        dogRepository.get.rejects(new RessourceNotFoundError())
+        dogRepository.get.rejects(this.RessourceNotFoundError())
 
         // when
         response = await request(app).get(`/dogs/${dogId}`)
