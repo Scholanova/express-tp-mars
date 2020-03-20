@@ -21,7 +21,7 @@ describe('dogService', () => {
       let dog
       beforeEach(() => {
         // given
-        dogData = { name: 'Rex', age: 12 }
+        dogData = { name: 'Rex', age: '12' }
         dog = new Dog({ id: 1, name: 'Rex', age: 12 })
         dogRepository.create.resolves(dog)
 
@@ -72,7 +72,7 @@ describe('dogService', () => {
 
       beforeEach(() => {
         // given
-        dogData = { name: 'Rex', age: "not a number" }
+        dogData = { name: 'Rex', age: 'not a number' }
 
         // when
         dogCreationPromise = dogService.create(dogData)
@@ -98,7 +98,7 @@ describe('dogService', () => {
 
       beforeEach(() => {
         // given
-        dogData = { name: 'Rex', age: -12 }
+        dogData = { name: 'Rex', age: '-12' }
 
         // when
         dogCreationPromise = dogService.create(dogData)
@@ -116,7 +116,7 @@ describe('dogService', () => {
 
         return expect(dogCreationPromise)
           .to.eventually.be.rejectedWith(ValidationError)
-          .with.deep.property('failedFields', expectedError.failedFields)
+          .and.to.have.deep.property('failedFields', expectedError.failedFields)
       })
     })
   })
