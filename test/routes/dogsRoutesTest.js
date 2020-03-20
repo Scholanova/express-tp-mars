@@ -1,7 +1,7 @@
 const { expect, request, sinon } = require('../testHelper')
 const app = require('../../lib/app')
 const dogRepository = require('../../lib/repositories/dogRepository')
-const dogsService = require('../../lib/services/dogService')
+const dogService = require('../../lib/services/dogService')
 const models = require('../../lib/models')
 const Dog = models.Dog
 
@@ -155,20 +155,20 @@ describe('dogRoutes', () => {
 
   describe('new dog', () =>{
 
+    let response
+
     beforeEach(() => {
-      sinon.stub(dogRepository, 'get');
+      sinon.stub(dogService, 'create')
     })
 
     context('when the dogData post is OK', () => {
 
-      let dogId
       let dog
 
       beforeEach(async () => {
         // given
-        //dogId = '1'
-        //dog = new Dog({id: dogId, name: 'Rooky', age: 4 })
-        // dogRepository.get.resolves(dog)
+        dog = new Dog({id: 16, name: 'Rooky', age: 4 })
+        dogService.create.resolves(dog)
 
         // when
         response = await request(app).post('/dogs/new').type('form').send({ '_method': 'post', 'name': 'Rooky', 'age': '4' })
@@ -176,7 +176,7 @@ describe('dogRoutes', () => {
 
       it('should call the repository with id', () => {
         // then
-        expect(dogRepository.get).to.have.been.calledWith(dogId)
+        expect(dogService.get).to.have.been.calledWith({name: 'Rooky'})
       })
 
       // it('should succeed with a status 200', () => {
@@ -184,11 +184,11 @@ describe('dogRoutes', () => {
       //   expect(response).to.have.status(200)
       // })
 
-      // it('should return an html with dog info inside', () => {
-      //   // then
-      //   expect(response).to.be.html
-      //   expect(response.text).to.contain('Rooky - 4')
-      // })
+      it('should return an html with dog info inside', () => {
+        // then
+        expect(response).to.be.html
+        expect(response.text).to.contain('Rooky - 4')
+      })
 
     })
   })
