@@ -2,7 +2,7 @@ const { expect } = require('../testHelper')
 
 const dogRepository = require('../../lib/repositories/dogRepository')
 const models = require('../../lib/models')
-const { RessourceNotFoundError } = require('../../lib/errors')
+const { ResourceNotFoundError } = require('../../lib/errors')
 const Dog = models.Dog
 
 describe('dogRepository', () => {
@@ -27,7 +27,7 @@ describe('dogRepository', () => {
 
       it('should throw a not found error', () => {
         // then
-        return expect(getDogPromise).to.eventually.be.rejectedWith(ReferenceError)
+        return expect(getDogPromise).to.eventually.be.rejectedWith(ResourceNotFoundError)
       })
     })
   })
@@ -83,7 +83,7 @@ describe('dogRepository', () => {
 
       beforeEach(async () => {
         // given
-        dog = await dogRepository.create({ name: 'Boby', age: 12 })
+        dog = await dogRepository.create({ name: 'Rex', age: 12 })
 
         // when
         result = await dogRepository.listAll()
