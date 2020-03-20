@@ -2,25 +2,41 @@ const { expect, request, sinon } = require('../testHelper')
 const app = require('../../lib/app')
 const dogRepository = require('../../lib/repositories/dogRepository')
 const models = require('../../lib/models')
+const dogService = require('../../lib/services/dogService')
 const Dog = models.Dog
 
 describe('dogServices', () => {
     
     describe('create', () => {
 
+        let dogData
+        let dog
+        let dogPromise
+
+        beforeEach(() => {
+            sinon.stub(dogRepository, 'create');
+          })
+
         context('when the dog data is valid', () => {
     
           beforeEach(() => {
             // given
-    
+            dogData = {name: 'Olaf', age: 4}
+            dog = new Dog({id: 1, name: 'Olaf', age: 4 })
+            dogRepository.create.resolves(dog)
+
             // when
-          })
+            dogPromise = dogService.create(dogData)
+        })
     
-          it('should call the dog Repository with the creation data', () => {
+          it('should call the dog Repository with the creation data', async () => {
             // then
+            await dogPromise
+            expect(dogRepository.create).to.have.been.calledWith(dogData)
           })
           it('should resolve with the created dog from repository', () => {
-            // then
+            const expectedDog = { name: 'Olaf', age: 4 }
+            return expect(dogPromise).to.eventually.equal(expectedDog)
           })
         })
     
