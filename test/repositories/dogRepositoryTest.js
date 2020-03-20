@@ -27,7 +27,7 @@ describe('dogRepository', () => {
 
       it('should throw a not found error', () => {
         // then
-        return expect(getDogPromise).to.eventually.be.rejectedWith(RessourceNotFoundError)
+        return expect(getDogPromise).to.eventually.be.rejectedWith(ReferenceError)
       })
     })
   })
