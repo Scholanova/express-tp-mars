@@ -1,0 +1,66 @@
+const { expect,sinon } = require('../testHelper')
+const dogService = require('../../lib/services/dogService')
+const dogRepository = require('../../lib/repositories/dogRepository')
+const models = require('../../lib/models')
+const Dog = models.Dog
+const { RequiredFielsError, NoEmptyField, NegativeAgeError } = require('../../lib/errors');
+
+describe('dogService', () => {
+
+    let dogData
+    let dog
+    //let createdDog
+    let getDogPromise
+
+    beforeEach(() => {
+        sinon.stub(dogRepository,'create');
+    })
+
+  describe('create', () => {
+
+    context('when the dog data is valid', () => {
+
+      beforeEach(() => {
+        // given
+        dogData = { name: 'Rex', age: 12 }
+        dog= new Dog({id:1,name: 'Rex', age: 12})
+        dogRepository.create.resolves(dog)
+        
+        // when
+        //createdDog =  await dogService.create(dogData)
+        getDogPromise = dogService.create(dogData)
+      })
+
+      it('should call the dog Repository with the creation data', async () => {
+        // then
+        await getDogPromise
+        expect(dogRepository.create).to.have.been.calledWith(dogData)
+      })
+      it('should resolve with the created dog from repository', () => {
+        // then
+        return expect(getDogPromise).to.eventually.be.equal(dog)
+      })
+    })
+
+    context('when the dog data is missing a name', () => {
+
+      beforeEach(() => {
+        // given
+        dogData = { name: '', age: 12 }
+        // when
+        //createdDog =  await dogService.create(dogData)
+        getDogPromise = dogService.create(dogData)
+      })
+
+      it('should not call the dog Repository', async() => {
+        // then
+        await getDogPromise
+        expect(dogRepository.create(dogData)).to.not.been.called
+      })
+      it('should reject with a missing parameter error', () => {
+        // then
+        return expect(getDogPromise).to.eventually.be.rejectedWith(NoEmptyField)
+      })
+    })
+  })
+})
