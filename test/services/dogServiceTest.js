@@ -3,7 +3,7 @@ const dogService = require('../../lib/services/dogService')
 const dogRepository = require('../../lib/repositories/dogRepository')
 const models = require('../../lib/models')
 const Dog = models.Dog
-const { RequiredFieldsError, NoEmptyField, NegativeAgeError } = require('../../lib/errors');
+const { RequiredFieldsError, NoEmptyFieldError,NameCannotBeNumberError,AgeMustBeNumberError, NegativeAgeError } = require('../../lib/errors');
 
 describe('dogService', () => {
 
@@ -60,8 +60,96 @@ describe('dogService', () => {
       it('should reject with a missing parameter error', async() => {
         // then
         await getDogPromise.catch(()=>{})
-        return expect(getDogPromise).to.eventually.be.rejectedWith(NoEmptyField)
+        return expect(getDogPromise).to.eventually.be.rejectedWith(NoEmptyFieldError)
       })
     })
-  })
+
+    context('when the dog data is missing both name and age ', () => {
+
+        beforeEach(() => {
+          // given
+          dogData = { name:"", age:"" }
+          // when
+          //createdDog =  await dogService.create(dogData)
+          getDogPromise = dogService.create(dogData)
+        })
+  
+        it('should not call the dog Repository', async () => {
+          // then
+          await getDogPromise.catch(()=>{})  //i.e try{await getDogPromise}catch{}
+          expect(dogRepository.create).to.not.have.been.called
+        })
+        it('should reject with a FieldsRequired error', async() => {
+          // then
+          await getDogPromise.catch(()=>{})
+          return expect(getDogPromise).to.eventually.be.rejectedWith(RequiredFieldsError)
+        })
+      })
+    })
+
+    context('when the name of the dog is a number ', () => {
+
+        beforeEach(() => {
+          // given
+          dogData = { name:2, age:3 }
+          // when
+          //createdDog =  await dogService.create(dogData)
+          getDogPromise = dogService.create(dogData)
+        })
+  
+        it('should not call the dog Repository', async () => {
+          // then
+          await getDogPromise.catch(()=>{})  //i.e try{await getDogPromise}catch{}
+          expect(dogRepository.create).to.not.have.been.called
+        })
+        it('should reject with a NameCannotBeNumberError error', async() => {
+          // then
+          await getDogPromise.catch(()=>{})
+          return expect(getDogPromise).to.eventually.be.rejectedWith(NameCannotBeNumberError)
+        })
+    })
+
+    context('when the age of the dog is not a number ', () => {
+
+        beforeEach(() => {
+          // given
+          dogData = { name:"Rex", age:"deux" }
+          // when
+          //createdDog =  await dogService.create(dogData)
+          getDogPromise = dogService.create(dogData)
+        })
+  
+        it('should not call the dog Repository', async () => {
+          // then
+          await getDogPromise.catch(()=>{})  //i.e try{await getDogPromise}catch{}
+          expect(dogRepository.create).to.not.have.been.called
+        })
+        it('should reject with a AgeMustBeNumberError error', async() => {
+          // then
+          await getDogPromise.catch(()=>{})
+          return expect(getDogPromise).to.eventually.be.rejectedWith(AgeMustBeNumberError)
+        })
+    })
+
+    context('when the age of the dog is a negative number ', () => {
+
+        beforeEach(() => {
+          // given
+          dogData = { name:"Rex", age:"-3" }
+          // when
+          //createdDog =  await dogService.create(dogData)
+          getDogPromise = dogService.create(dogData)
+        })
+  
+        it('should not call the dog Repository', async () => {
+          // then
+          await getDogPromise.catch(()=>{})  //i.e try{await getDogPromise}catch{}
+          expect(dogRepository.create).to.not.have.been.called
+        })
+        it('should reject with a NegativeAgeError error', async() => {
+          // then
+          await getDogPromise.catch(()=>{})
+          return expect(getDogPromise).to.eventually.be.rejectedWith(NegativeAgeError)
+        })
+    })
 })
