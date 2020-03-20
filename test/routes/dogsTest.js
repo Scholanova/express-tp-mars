@@ -1,6 +1,7 @@
 const { expect, request, sinon } = require('../testHelper')
 const app = require('../../lib/app')
 const dogRepository = require('../../lib/repositories/dogRepository')
+const dogsService = require('../../lib/services/dogsService')
 const models = require('../../lib/models')
 const Dog = models.Dog
 const { DogNotFoundError } = require('../../lib/errors')
@@ -58,26 +59,6 @@ describe('dogRoutes', () => {
         expect(response.text).to.contain('Rex - 12')
       })
     })
-
-    // context('when there is a dog in the repository', () => {
-    //
-    //   let dog
-    //
-    //   beforeEach(async () => {
-    //     // given
-    //     dog = await dogRepository.create({ name: 'Rex', age: 12 })
-    //
-    //     // when
-    //     result = await dogRepository.listAll()
-    //   })
-    //
-    //   it('should return a list with the dog', () => {
-    //     // then
-    //     const dogValue = dog.get()
-    //     const resultValues = result.map((dog) => dog.get())
-    //     expect(resultValues).to.deep.equal([dogValue])
-    //   })
-    // })
   })
   describe('id', () => {
     let dogId
@@ -141,5 +122,47 @@ describe('dogRoutes', () => {
       })
     })
 
+  })
+
+  describe('new', () => {
+    let dogData
+    let response
+
+    beforeEach(() => {
+      sinon.stub(dogsService, 'create')
+    })
+
+    context('when the parameters are good', () => {
+      dogData = {name:'Rex',age:12}
+      beforeEach(async () => {
+         // given
+         const dog = new Dog({ id:5, name: 'Rex', age: 12 })
+         dogsService.create.resolves(dog)
+ 
+         // when
+         response = await  request(app).post('/dogs/new')
+                                    .type('form')
+                                    .send({
+                                      'name':'Rex',
+                                      'age':12
+                                    })
+      })
+
+      it('should call the service with dogData', () => {
+        // then
+        expect(dogsService.create).to.have.been.calledWith(dogData)
+      })
+
+      it('should success with a status 200', () => {
+        // then
+        expect(response).to.have.status(200)
+      })
+
+      it('should return an empty list message', () => {
+        // then
+        expect(response).to.redirectTo(`/dogs/${dog.id}`);
+        expect(response.text).to.contain('Rex - 12')
+      })
+    })
   })
 })
