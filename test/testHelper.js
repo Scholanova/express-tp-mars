@@ -6,6 +6,7 @@ const chaiHttp = require('chai-http')
 const sinon = require('sinon')
 const models  = require('../lib/models');
 chai.use(chaiHttp)
+chai.use(require('chai-as-promised'))
 chai.use(require('sinon-chai'));
 
 const expect = chai.expect

@@ -9,7 +9,7 @@ describe('dogRepository', () => {
   afterEach(async () => {
     await Dog.destroy({ where: {} })
   })
-
+ 
   describe('create', () => {
 
     let createdDog

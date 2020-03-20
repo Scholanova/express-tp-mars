@@ -22,7 +22,7 @@ describe('calculusService', () => {
     })
 
     it('should return the sum', () => {
-      // then
+      // then 
       const expectedSum = operand1 + operand2
       expect(result).to.be.equal(expectedSum)
     })
