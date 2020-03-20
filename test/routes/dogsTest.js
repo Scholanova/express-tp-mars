@@ -1,4 +1,5 @@
 const { expect, request, sinon } = require('../testHelper')
+const { ResourceNotFoundError } = require('../../lib/errors')
 const app = require('../../lib/app')
 const dogRepository = require('../../lib/repositories/dogRepository')
 const models = require('../../lib/models')
@@ -36,7 +37,7 @@ describe('dogRoutes', () => {
       })
     })
 
-    context('when there is no dogs in the repository', () => {
+    context('when there are dogs in the repository', () => {
 
       beforeEach(async () => {
         // given
@@ -80,46 +81,29 @@ describe('dogRoutes', () => {
     // })
   })
 
-  describe('item', () => {
+  describe('show', () => {
 
+    let dogId
     let response
 
     beforeEach(() => {
-      sinon.stub(dogRepository, 'get');
+      sinon.stub(dogRepository, 'get')
     })
 
-    context('when there is a dog in the repository', () => {
+    context('when there is no dog matching in the repository', () => {
 
       beforeEach(async () => {
         // given
-        const dog = new Dog({ name: 'Rex', age: 12 })
-        dogRepository.get.resolves(dog)
+        dogId = '123'
+        dogRepository.get.rejects(new ResourceNotFoundError())
 
         // when
-        response = await request(app).get(`/dogs/${dog.id}`)
+        response = await request(app).get(`/dogs/${dogId}`)
       })
 
-      it('should succeed with a status 200', () => {
+      it('should call the repository with id', () => {
         // then
-        expect(response).to.have.status(200)
-      })
-
-      it('should return an html with dog info inside', () => {
-        // then
-        expect(response).to.be.html
-        expect(response.text).to.contain('Rex - 12')
-      })
-
-    })
-
-    context('when there is a no dog in the repository', () => {
-      
-      beforeEach(async () => {
-        // given
-        dogRepository.get.resolves(null)
-
-        // when
-        response = await request(app).get(`/dogs/0`)
+        expect(dogRepository.get).to.have.been.calledWith(dogId)
       })
 
       it('should succeed with a status 404', () => {
@@ -127,14 +111,44 @@ describe('dogRoutes', () => {
         expect(response).to.have.status(404)
       })
 
-      it('should return an html with error info', () => {
+      it('should return the resource not found page', () => {
         // then
         expect(response).to.be.html
-        expect(response.text).to.contain('This page does not exist')
+        expect(response.text).to.contain('Resource not found')
       })
-
     })
 
-  })
+    context('when there is a dog matching in the repository', () => {
 
+      let dog
+
+      beforeEach(async () => {
+        // given
+        dogId = '123'
+        dog = new Dog({ id: dogId, name: 'Rex', age: 12 })
+
+        dogRepository.get.resolves(dog)
+
+        // when
+        response = await request(app).get(`/dogs/${dogId}`)
+      })
+
+      it('should call the repository with id', () => {
+        // then
+        expect(dogRepository.get).to.have.been.calledWith(dogId)
+      })
+
+      it('should succeed with a status 200', () => {
+        // then
+        expect(response).to.have.status(200)
+      })
+
+      it('should return the show page with the dog’s info', () => {
+        // then
+        expect(response).to.be.html
+        expect(response.text).to.contain(`Dog n°${dogId}`)
+        expect(response.text).to.contain(`${dog.name} - ${dog.age}`)
+      })
+    })
+  })
 })
