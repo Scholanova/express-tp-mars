@@ -1,7 +1,9 @@
 const { expect } = require('../testHelper')
 
 const dogsService = require('../../lib/services/dogsService')
-const { NameCantBeEmptyError,AgeCantBeEmptyError,AgeCantbeNegativeError } = require('../../lib/errors')
+const dogRepository = require('../../lib/repositories/dogRepository')
+const { NameCantBeEmptyError,AgeCantBeEmptyError,AgeCantbeNegativeError,ValidationError  } = require('../../lib/errors')
+const Dog = require('../../lib/models').Dog
 
 describe('dogService', () => {
 
@@ -49,5 +51,83 @@ describe('dogService', () => {
         // then
       })
     })
+    context('when the dog data is missing properties', () => {
+
+        beforeEach(() => {
+          // given
+          dogData = { name: undefined, age: undefined }
+  
+          // when
+          dogCreationPromise = dogService.create(dogData)
+        })
+  
+        it('should not call the dog Repository', async () => {
+          // then
+          await dogCreationPromise.catch(() => {})
+          expect(dogRepository.create).to.not.have.been.called
+        })
+        it('should reject with a missing parameter error', () => {
+          // then
+          const expectedError = new ValidationError()
+          expectedError.addFailedField('name', 'cannot be empty')
+          expectedError.addFailedField('age', 'cannot be empty')
+  
+          return expect(dogCreationPromise)
+            .to.eventually.be.rejectedWith(ValidationError)
+            .with.deep.property('failedFields', expectedError.failedFields)
+        })
+    })
+    context('when the dog age is not a number', () => {
+
+        beforeEach(() => {
+          // given
+          dogData = { name: 'Rex', age: 'not a number' }
+  
+          // when
+          dogCreationPromise = dogService.create(dogData)
+        })
+  
+        it('should not call the dog Repository', async () => {
+          // then
+          await dogCreationPromise.catch(() => {})
+          expect(dogRepository.create).to.not.have.been.called
+        })
+        it('should reject with a age must be a number error', () => {
+          // then
+          const expectedError = new ValidationError()
+          expectedError.addFailedField('age', 'must be a number')
+  
+          return expect(dogCreationPromise)
+            .to.eventually.be.rejectedWith(ValidationError)
+            .with.deep.property('failedFields', expectedError.failedFields)
+        })
+    })
+
+    context('when the dog age is negative', () => {
+
+        beforeEach(() => {
+          // given
+          dogData = { name: 'Rex', age: '-12' }
+  
+          // when
+          dogCreationPromise = dogService.create(dogData)
+        })
+  
+        it('should not call the dog Repository', async () => {
+          // then
+          await dogCreationPromise.catch(() => {})
+          expect(dogRepository.create).to.not.have.been.called
+        })
+        it('should reject with a age cannot be negative error', () => {
+          // then
+          const expectedError = new ValidationError()
+          expectedError.addFailedField('age', 'cannot be negative')
+  
+          return expect(dogCreationPromise)
+            .to.eventually.be.rejectedWith(ValidationError)
+            .and.to.have.deep.property('failedFields', expectedError.failedFields)
+        })
+      })
+
   })
 })
