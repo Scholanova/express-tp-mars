@@ -42,4 +42,4 @@ Partant du projet précédent, la table DOG, la migration, ainsi que le model so
 - Modifier le formulaire et les tests de la route 
 
 
-Benoit JERIC
+Paul Pauwels
