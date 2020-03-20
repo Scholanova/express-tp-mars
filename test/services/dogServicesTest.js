@@ -3,7 +3,7 @@ const app = require('../../lib/app')
 const dogRepository = require('../../lib/repositories/dogRepository')
 const models = require('../../lib/models')
 const dogService = require('../../lib/services/dogService')
-const { NullDogResultError } = require('../../lib/errors');
+const { NullDogResultError, NameDogIsMissingError } = require('../../lib/errors');
 const Dog = models.Dog
 
 describe('dogServices', () => {
@@ -46,7 +46,7 @@ describe('dogServices', () => {
                 // given
                 dogData = {name: '', age: 4}
                 dog = new Dog({id: 1, name: 'Olaf', age: 4 })
-                // dogRepository.create.resolves(dog)
+                //dogRepository.create.resolves(dog)
                 
                 // when
                 dogPromise = dogService.create(dogData)
@@ -59,7 +59,7 @@ describe('dogServices', () => {
             })
             it('should reject with a missing parameter error', () => {
                 // then
-                return expect(dogPromise).to.eventually.be.rejectedWith(NullDogResultError)
+                return expect(dogPromise).to.eventually.be.rejectedWith(NameDogIsMissingError)
             })
         })
     })
