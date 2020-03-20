@@ -40,6 +40,3 @@ Partant du projet précédent, la table DOG, la migration, ainsi que le model so
 - Modifier les tests de création et de lecture du repository pour tenir compte de cette nouvelle information 
 - Modifier le service et ses tests pour faire en sorte que la couleur soit comprise entre (`blanc`, `noir` ou `marron`) et non nulle. 
 - Modifier le formulaire et les tests de la route 
-
-
-Paul Pauwels
