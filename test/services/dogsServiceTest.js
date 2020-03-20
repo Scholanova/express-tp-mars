@@ -4,7 +4,7 @@ const dogService = require('../../lib/services/dogsService')
 const dogRepository = require('../../lib/repositories/dogRepository')
 const models = require('../../lib/models')
 const Dog = models.Dog
-const { MissingFieldsError, NotEvenResultError } = require('../../lib/errors')
+const { MissingFieldsError, LowerThanZeroError } = require('../../lib/errors')
 
 describe('dogService', () => {
 
@@ -68,23 +68,70 @@ describe('dogService', () => {
       })
     })
 
-    // context('when the dog data is missing an age', () => {
+    context('when the dog data is missing an age', () => {
 
-    //   beforeEach(async () =>{
-    //     // given
-    //     dogData = { name: 'Popy'}
+      beforeEach(async () =>{
+        // given
+        dogData = { name: 'Poppy' }
+      })
 
-    //     // when
-    //     createdDog =  await dogService.create(dogData)
-    //   })
+      it('should not call the dog Repository', () => {
+        // then
+        try{
+          // when
+          result = dogService.create(dogData)
+        }
+        catch (e){
+          expect(dogRepository.create).to.not.have.been.called
+        }
+      })
+      it('should reject with a missing parameter error', () => {
+        // then
+        try{
+          // when
+          result = dogService.create(dogData)
+        }
+        catch (e){
+          if(e instanceof MissingFieldsError){
+            throw e;
+          }
+          expect(result).to.be.eventually.rejectedWith(MissingFieldsError)
+        }
+      })
+    })
 
-    //   it('should not call the dog Repository', () => {
-    //     // then
 
-    //   })
-    //   it('should reject with a missing parameter error', () => {
-    //     // then
-    //   })
-    // })
+
+    context('when the dog data have a negative age', () => {
+
+      beforeEach(async () =>{
+        // given
+        dogData = { name: 'Poppy', age: -2 }
+      })
+
+      it('should not call the dog Repository', () => {
+        // then
+        try{
+          // when
+          result = dogService.create(dogData)
+        }
+        catch (e){
+          expect(dogRepository.create).to.not.have.been.called
+        }
+      })
+      it('should reject with a missing parameter error', () => {
+        // then
+        try{
+          // when
+          result = dogService.create(dogData)
+        }
+        catch (e){
+          if(e instanceof LowerThanZeroError){
+            throw e;
+          }
+          expect(result).to.be.eventually.rejectedWith(LowerThanZeroError)
+        }
+      })
+    })
   })
 })
