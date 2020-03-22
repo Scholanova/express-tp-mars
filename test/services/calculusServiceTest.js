@@ -45,6 +45,46 @@ describe('calculusService', () => {
         return expect(sumPromise).to.eventually.be.rejectedWith(NotEvenResultError)
       })
     })
+
+
+   context('when the two operands sous to a even number', () => {
+
+      beforeEach(() => {
+        // given
+        operand1 = 4
+        operand2 = 3
+
+        // when
+        sumPromise = calculusService.soustract(operand1, operand2)
+      })
+
+      it('should return the sum', () => {
+        // then
+        const expectedSum = operand1 - operand2
+        return expect(sumPromise).to.eventually.equal(expectedSum)
+      })
+    })
+
+
+   context('when the two operands sum to an NEGATIF number', () => {
+
+      beforeEach(() => {
+        // given
+        operand1 = 1
+        operand2 = 2
+
+        // when
+        sumPromise = calculusService.soustract(operand1, operand2)
+      })
+
+      it('should throw an not even error', () => {
+        // then
+        return expect(sumPromise).to.eventually.be.rejectedWith(NotEvenResultError)
+      })
+    })
+
+
+
   })
 
   describe('subtract', () => {
